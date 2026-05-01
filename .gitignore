@@ -2,4 +2,6 @@ __pycache__/
 .paths
 .pass
 .otps.json
+.otps_old.json
+password_generator_new.py
 errors.txt
