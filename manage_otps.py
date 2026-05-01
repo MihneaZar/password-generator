@@ -60,9 +60,9 @@ sys.path.append(open(f'{HOMEPATH}/.paths').read())
 from ConsoleListInterface import ConsoleListInterface # pyright: ignore[reportMissingImports]
 from cryptography.fernet import Fernet
 from password_generator import is_hash
+from pwinput import pwinput
 from hashlib import sha256
 from readchar import key
-import pwinput
 import base64
 import json
 
@@ -91,7 +91,7 @@ def create_new_secret():
     if not name or name.isspace():
         return None
 
-    code = input("Original secret: ")
+    code = pwinput(prompt="Original secret: ", mask='*')
     if not code or code.isspace():
         return None
 
@@ -107,10 +107,12 @@ def create_new_secret():
         
     key = base64.b64encode(f"{password:<32}".encode("utf-8"))
     
-    return {'name': name, 'secret': Fernet(key=key).encrypt(code).decode()}
+    return {'name': name, 'secret': Fernet(key=key).encrypt(code.encode("utf-8")).decode()}
 
 
 def main():
+    os.system('title Manage OTP Secrets')
+
     if not os.path.exists(PASS_HASH_FILE) or not is_hash(open(PASS_HASH_FILE).read(HASH_LENGTH)):
         print("\nPassword hash is missing or is corrupted, please set by running 'password_generator.py'.\n")
         return
@@ -121,8 +123,7 @@ def main():
         
         otps = []
     else: 
-        # otps = json.load(open(f'{HOMEPATH}/.otps.json', 'w', encoding='utf-8'))
-        otps = []
+        otps = json.load(open(f'{HOMEPATH}/.otps.json', 'r', encoding='utf-8'))
 
     console = ConsoleListInterface(items=[otp['name'] for otp in otps], specialCommands=[key.CTRL_N, key.ESC], helpPage=HELP_PAGE)
     
@@ -131,11 +132,12 @@ def main():
 
         # adding secret
         if command == key.CTRL_N:
-            new_secret = console.separateInteraction(function=create_new_secret)
+            new_secret = console.separateInteraction(function=create_new_secret, showCursor=True)
             if new_secret:
                 otps.append(new_secret)
 
             console.updateList([otp['name'] for otp in otps])
+            console.updatePos(len(otps) - 1)
 
         # changing name of secret
         if command == key.CTRL_R:
