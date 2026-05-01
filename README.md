@@ -25,7 +25,8 @@ Which conventions are used isn't the important part, the important part is that 
 Writing them down somewhere could be useful (remember: the program's password is essential not to be shared, but also not to be forgotten!).
 
 ## Extra Info
-Tested only on Windows 11.
+This program is written to function properly on (at least) Android Python IDEs (such as [Pydroid](https://pydroid.app/), though with slight modifications that are explained in the app. <br>
+Tested on Windows 11 and Android/Pydroid 3.
 
 ## Observed Issues
 One issue encountered is that certain websites have password length limits. <br>
