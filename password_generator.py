@@ -1,5 +1,4 @@
 from inputimeout import inputimeout, TimeoutOccurred
-from cryptography.fernet import Fernet
 from termcolor import colored
 from pwinput import pwinput
 from hashlib import sha256
@@ -142,6 +141,8 @@ def generate_password(password, seed):
 
 
 def generate_otp(password, secret):
+    from cryptography.fernet import Fernet
+    
     key = base64.b64encode(f"{password:<32}".encode("utf-8"))
     otp_secret = Fernet(key=key).decrypt(secret)
     return pyotp.TOTP(otp_secret).now()
