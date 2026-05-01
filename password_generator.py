@@ -19,7 +19,7 @@ IS_ANDROID = hasattr(sys, 'getandroidapilevel')
 PASS_HASH_FILE = f"{HOMEPATH}/.pass"
 OTP_FILE = f"{HOMEPATH}.otps.json"
 if not IS_ANDROID:
-    sys.stderr = open(f"{HOMEPATH}/erros.txt", "a")
+    sys.stderr = open(f"{HOMEPATH}/errors.txt", "a")
 
 HASH_LENGTH = 64
 HASH_CHARS  = string.digits + "abcdef"
