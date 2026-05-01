@@ -1,0 +1,18 @@
+[
+  {
+    "platform": "Moodle",
+    "secret": "gAAAAABp9IOyhbaSzB5kBTctMQKcE0Djj4FaKsHZDlZ1NxrtsgZ5lghHDThVKsD5rebSARTON6DrghJatsu0U2AjyyrpI8JQPAUakwrsbJy4_zcXT0OAYhAhWkyx7YU84e7eC_KZDH1p"
+  },
+  {
+    "platform": "Discord",
+    "secret": "gAAAAABp9ISmOOHEys89ubNH0aV24AH-QsammyCdi56nLLimO19X7R4b2RDPnJNoDDWwZnGLSdrPkNffiAOGKhJ9LnPeIvZbkGG9TO1eHjyKC2znQYV5Xaw="
+  },
+  {
+    "platform": "Gmail (main)",
+    "secret": "gAAAAABp9IS_ooerFAe4fOwq28M0t72AClrxWld1pS2JZe68eAVLBaoiYP0L_WxE9ma0FpHdBjXrFc7kNLGLKRHn2qhLWNXQ7j1fQFmNOACYczcu0EhAJvS68pP4OyNCY0_F9aOiX5Wj"
+  },
+  {
+    "platform": "GitHub",
+    "secret": "gAAAAABp9ITW2KvyhIVEpo7CSchdoZyVkwWqAOz0Ei7KhALcBoFBQhL1foSrgqQ8U1ntn7rRmDbTxanrZv45-JwAhJeEt0C5l8ItJhqD8tp3Avz3FoelB6o="
+  }
+]

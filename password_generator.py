@@ -1,18 +1,24 @@
 from inputimeout import inputimeout, TimeoutOccurred
+from cryptography.fernet import Fernet
 from termcolor import colored
 from pwinput import pwinput
 from hashlib import sha256
 import cursor
 import string
+import base64
+import pyotp
+import json
 import sys
 import os
 
 cls = lambda: os.system('cls' if sys.platform=='win32' else 'clear')
 
 PASS_HASH_FILE = ".pass"
+OTP_FILE = ".auth.json"
 if sys.platform == "win32":
     sys.stderr = open("C:/Users/Mihnea/Desktop/Random thoughts/Cool stuff/Password Generator/errors.txt", "a")
     PASS_HASH_FILE = "C:/Users/Mihnea/Desktop/Random thoughts/Cool stuff/Password Generator/.pass"
+    OTP_FILE = "C:/Users/Mihnea/Desktop/Random thoughts/Cool stuff/Password Generator/.auth.json"
 
 HASH_LENGTH = 64
 HASH_CHARS  = string.digits + "abcdef"
@@ -119,6 +125,29 @@ def check_password(password):
         return GOOD_PASSWORD
        
 
+def generate_password(password, seed):
+    # creating a secret code by making seed and password same length
+    # and combining them character by character
+    if len(seed) < len(password):
+        seed = (len(password) // len(seed)) * seed + seed[:len(password) % len(seed)]
+
+    if len(password) < len(seed):
+        password = (len(seed) // len(password)) * password + password[:len(seed) % len(password)]
+
+    secret_code = "".join([seed_char + pass_char for (seed_char, pass_char) in zip(seed, password)])
+
+    # getting numerical values from the hash of the secret code
+    hashed_values = sha256(secret_code.encode('utf-8')).digest()
+
+    return "".join([ACCEPTED_CHARACTERS[value % len(ACCEPTED_CHARACTERS)] for value in hashed_values])
+
+
+def generate_otp(password, secret):
+    key = base64.b64encode(f"{password:<32}".encode("utf-8"))
+    otp_secret = Fernet(key=key).decrypt(secret)
+    return pyotp.TOTP(otp_secret).now()
+
+
 def password_loop():
     if not IS_ANDROID:
         os.system("title Password Generator")
@@ -160,10 +189,13 @@ def password_loop():
         print(f'{colored("Warning", "red")}: Password is incorrect.\nPlease try again or leave empty to quit.\n')
         password = pwinput(mask='*')
         print()
+
+    otps = json.load(open(OTP_FILE))
        
-    print(f'{colored("Attention", "yellow")}: Choose a naming standard for your apps and websites (such as their name, or the domain name of websites).\n{colored("Attention", "yellow")}: the name you type here must be identical every time to generate the same password.\n')
+    print(f"{colored('Attention', 'yellow')}: Choose a naming standard for your apps and websites (such as their name, or the domain name of websites).\n{colored('Attention', 'yellow')}: the name you type here must be identical every time to generate the same password. \
+          \n{colored('Attention', 'yellow')}: For OTP, input 'otp/' then one of the following: {', '.join([otp['platform'] for otp in otps])}.\n")
     try:
-        seed = inputimeout(prompt="App/Website: ", timeout=TIMEOUT)
+        seed = inputimeout(prompt="App/Website: ", timeout=TIMEOUT).lstrip()
     except TimeoutOccurred:
         if not IS_ANDROID:
             print()
@@ -174,21 +206,23 @@ def password_loop():
     if not seed or seed.isspace():
         print()
         quit()
-   
-    # creating a secret code by making seed and password same length
-    # and combining them character by character
-    if len(seed) < len(password):
-        seed = (len(password) // len(seed)) * seed + seed[:len(password) % len(seed)]
 
-    if len(password) < len(seed):
-        password = (len(seed) // len(password)) * password + password[:len(seed) % len(password)]
 
-    secret_code = "".join([seed_char + pass_char for (seed_char, pass_char) in zip(seed, password)])
+    if seed.lower().startswith('otp/'):
+        app = seed[len('otp/'):].lower()
+        
+        otp = next((otp for otp in otps if otp['platform'].lower().startswith(app)), None)
 
-    # getting numerical values from the hash of the secret code
-    hashed_values = sha256(secret_code.encode('utf-8')).digest()
+        if not otp:
+            return f'{colored("Warning", "red")}: Unknown OTP platform.\n'
+        
+        print(f'{colored("Success", "green")}: Secret for {otp["platform"]} found.')
 
-    output_password = "".join([ACCEPTED_CHARACTERS[value % len(ACCEPTED_CHARACTERS)] for value in hashed_values])
+        secret = otp['secret']
+        output_password = generate_otp(password, secret)
+    else:
+        output_password = generate_password(password, seed)
+
 
     if not IS_ANDROID:
         import pyperclip
@@ -208,6 +242,8 @@ def password_loop():
             pass
 
         cursor.show()
+
+    return ""
 
 
 def main():
