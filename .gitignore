@@ -1,4 +1,5 @@
 __pycache__/
+.paths
 .pass
 .otps.json
 errors.txt
