@@ -14,10 +14,12 @@ import os
 cls = lambda: os.system('cls' if sys.platform=='win32' else 'clear')
 HOMEPATH = os.path.dirname(os.path.realpath(__file__))
 
+IS_ANDROID = hasattr(sys, 'getandroidapilevel')
 
 PASS_HASH_FILE = f"{HOMEPATH}/.pass"
 OTP_FILE = f"{HOMEPATH}.otps.json"
-sys.stderr = open(f"{HOMEPATH}/erros.txt", "a")
+if not IS_ANDROID:
+    sys.stderr = open(f"{HOMEPATH}/erros.txt", "a")
 
 HASH_LENGTH = 64
 HASH_CHARS  = string.digits + "abcdef"
@@ -30,8 +32,6 @@ GOOD_PASSWORD   = "Yes this is a good password"
 # used for generating app/website password
 # other special characters are not used to avoid potential issues
 ACCEPTED_CHARACTERS = string.ascii_lowercase + string.ascii_uppercase + string.digits + "!@#$%^&\\"
-
-IS_ANDROID = hasattr(sys, 'getandroidapilevel')
 
 # timeout in seconds after password was introduced
 # also for showing generated password on mobile
