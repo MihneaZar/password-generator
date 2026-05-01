@@ -8,11 +8,11 @@ import sys
 import os
 
 cls = lambda: os.system('cls' if sys.platform=='win32' else 'clear')
+HOMEPATH = os.path.dirname(os.path.realpath(__file__))
 
-PASS_HASH_FILE = ".pass"
-if sys.platform == "win32":
-    sys.stderr = open("C:/Users/Mihnea/Desktop/Random thoughts/Cool stuff/Password Generator/errors.txt", "a")
-    PASS_HASH_FILE = "C:/Users/Mihnea/Desktop/Random thoughts/Cool stuff/Password Generator/.pass"
+
+PASS_HASH_FILE = f"{HOMEPATH}/.pass"
+sys.stderr = open(f"{HOMEPATH}/erros.txt", "a")
 
 HASH_LENGTH = 64
 HASH_CHARS  = string.digits + "abcdef"
