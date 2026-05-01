@@ -12,13 +12,12 @@ import sys
 import os
 
 cls = lambda: os.system('cls' if sys.platform=='win32' else 'clear')
+HOMEPATH = os.path.dirname(os.path.realpath(__file__))
 
-PASS_HASH_FILE = ".pass"
-OTP_FILE = ".auth.json"
-if sys.platform == "win32":
-    sys.stderr = open("C:/Users/Mihnea/Desktop/Random thoughts/Cool stuff/Password Generator/errors.txt", "a")
-    PASS_HASH_FILE = "C:/Users/Mihnea/Desktop/Random thoughts/Cool stuff/Password Generator/.pass"
-    OTP_FILE = "C:/Users/Mihnea/Desktop/Random thoughts/Cool stuff/Password Generator/.auth.json"
+
+PASS_HASH_FILE = f"{HOMEPATH}/.pass"
+OTP_FILE = f"{HOMEPATH}.auth.json"
+sys.stderr = open(f"{HOMEPATH}/erros.txt", "a")
 
 HASH_LENGTH = 64
 HASH_CHARS  = string.digits + "abcdef"
