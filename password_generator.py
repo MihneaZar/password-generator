@@ -16,7 +16,7 @@ HOMEPATH = os.path.dirname(os.path.realpath(__file__))
 
 
 PASS_HASH_FILE = f"{HOMEPATH}/.pass"
-OTP_FILE = f"{HOMEPATH}.auth.json"
+OTP_FILE = f"{HOMEPATH}.otps.json"
 sys.stderr = open(f"{HOMEPATH}/erros.txt", "a")
 
 HASH_LENGTH = 64
