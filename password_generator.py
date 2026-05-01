@@ -193,7 +193,7 @@ def password_loop():
     otps = json.load(open(OTP_FILE))
        
     print(f"{colored('Attention', 'yellow')}: Choose a naming standard for your apps and websites (such as their name, or the domain name of websites).\n{colored('Attention', 'yellow')}: the name you type here must be identical every time to generate the same password. \
-          \n{colored('Attention', 'yellow')}: For OTP, input 'otp/' then one of the following: {', '.join([otp['platform'] for otp in otps])}.\n")
+          \n{colored('Attention', 'yellow')}: For OTP, input 'otp/' then one of the following:{chr(10) if IS_ANDROID else ' '}{', '.join([otp['platform'] for otp in otps])}.\n")
     try:
         seed = inputimeout(prompt="App/Website: ", timeout=TIMEOUT).lstrip()
     except TimeoutOccurred:
