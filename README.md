@@ -39,6 +39,10 @@ Notes:
 
 ## Extra Info
 This program is written to function properly on (at least) Android Python IDEs (such as [Pydroid](https://pydroid.app/), though with slight modifications that are explained in the app. <br>
+
+-------------------------------------------------------------------------
+
+*Copyright (c) 2026 Mihnea Bogdan Zarojanu*
 Tested on Windows 11 and Android/Pydroid 3. 
 
 ## Observed Issues
