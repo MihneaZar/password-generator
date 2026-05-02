@@ -61,8 +61,6 @@ def create_new_secret():
 
 
 def main():
-    os.system('title Manage OTP Secrets')
-
     if not os.path.exists(PASS_HASH_FILE) or not is_hash(open(PASS_HASH_FILE).read(HASH_LENGTH)):
         print("\nPassword hash is missing or is corrupted, please set by running 'password_generator.py'.\n")
         return
@@ -76,6 +74,9 @@ def main():
         otps = json.load(open(f'{HOMEPATH}/.otps.json', 'r', encoding='utf-8'))
 
     console = ConsoleListInterface(items=[otp['name'] for otp in otps], specialCommands=[key.CTRL_N, key.ESC], helpPage=HELP_PAGE)
+
+    console.setTitle("Manage OTP Secrets")
+    console.setTopText("Your OTP Secrets:\n")
     
     while True:
         command, curr_pos = console.interact()
