@@ -149,10 +149,14 @@ def generate_password(password, seed):
 
 
 def generate_otp(password, secret):
-    
-    key = base64.b64encode(f"{password:<32}".encode("utf-8"))
-    otp_secret = Fernet(key=key).decrypt(secret)
-    return pyotp.TOTP(otp_secret).now()
+    try:
+        key = base64.b64encode(f"{password:<32}".encode("utf-8"))
+        otp_secret = Fernet(key=key).decrypt(secret)
+        return pyotp.TOTP(otp_secret).now()
+    except:
+        
+        print(f'{colored("Warning", "red")}: OTP generation failed, this secret is invalid.\n')
+        return None
 
 
 def password_loop():
@@ -229,6 +233,11 @@ def password_loop():
         output_password = generate_otp(password, secret)
     else:
         output_password = generate_password(password, seed)
+
+    
+    # issue with generating otp
+    if output_password is None:
+        return
 
 
     if not IS_ANDROID:
