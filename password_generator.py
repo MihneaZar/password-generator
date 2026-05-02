@@ -10,10 +10,18 @@ import json
 import sys
 import os
 
-cls = lambda: os.system('cls' if sys.name=='win32' else 'clear')
-HOMEPATH = os.path.dirname(os.path.realpath(__file__))
+try:
+    from cryptography.fernet import Fernet
+except:
+    pass
 
 IS_ANDROID = hasattr(sys, 'getandroidapilevel')
+if not IS_ANDROID:
+    import pyperclip
+
+
+cls = lambda: os.system('cls' if sys.name=='win32' else 'clear')
+HOMEPATH = os.path.dirname(os.path.realpath(__file__))
 
 PASS_HASH_FILE = f"{HOMEPATH}/.pass"
 OTP_FILE = f"{HOMEPATH}/.otps.json"
@@ -141,7 +149,6 @@ def generate_password(password, seed):
 
 
 def generate_otp(password, secret):
-    from cryptography.fernet import Fernet
     
     key = base64.b64encode(f"{password:<32}".encode("utf-8"))
     otp_secret = Fernet(key=key).decrypt(secret)
@@ -225,8 +232,6 @@ def password_loop():
 
 
     if not IS_ANDROID:
-        import pyperclip
-
         pyperclip.copy(output_password)
 
         print(f'{colored("Success", "green")}: App/Website password copied to clipboard.\n{colored("Warning", "red")}: Please don\'t forget to overwrite it and remove it from clipboard when finished.\n')
