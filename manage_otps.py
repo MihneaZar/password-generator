@@ -1,4 +1,4 @@
-from ConsoleListInterface.Interface import ConsoleListInterface
+from ConsoleListInterface import ConsoleListInterface
 from cryptography.fernet import Fernet
 from password_generator import is_hash
 from pwinput import pwinput
