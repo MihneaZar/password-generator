@@ -6,7 +6,7 @@ Console application for generating website/app passwords based on a saved passwo
 - The [PWInput](https://pypi.org/project/pwinput/) library for inputting hidden password;
 - The [termcolor](https://pypi.org/project/termcolor/) library for colored console text;
 - The [cursor](https://pypi.org/project/cursor/) library for hiding the cursor in console;
-- (Optional) The [ConsoleListInterface](https://github.com/MihneaZar/ConsoleListInterface) class for an interface for adding and editing OTP secrets;
+- (Optional) The [ConsoleListInterface](https://github.com/MihneaZar/ConsoleListInterface) library for an interface for adding and editing OTP secrets;
 - (Optional) The [cryptography](https://pypi.org/project/cryptography/) library for encoding and decoding information with the password.
 
 ## How it functions
