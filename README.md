@@ -1,11 +1,13 @@
 ## Description
-Console application for generating website/app passwords based on a saved password (only the hash is saved).
+Console application for generating website/app passwords based on a saved password (with only the hash saved, for security).
 
 ## Requirements
 - The [inputimeout](https://pypi.org/project/inputimeout/) library for reading from console with a timeout;
 - The [PWInput](https://pypi.org/project/pwinput/) library for inputting hidden password;
 - The [termcolor](https://pypi.org/project/termcolor/) library for colored console text;
-- The [cursor](https://pypi.org/project/cursor/) library for hiding the cursor in console.
+- The [cursor](https://pypi.org/project/cursor/) library for hiding the cursor in console;
+- (Optional) The [ConsoleListInterface](https://github.com/MihneaZar/ConsoleListInterface) class for an interface for adding and editing OTP secrets;
+- (Optional) The [cryptography](https://pypi.org/project/cryptography/) library for encoding and decoding information with the password.
 
 ## How it functions
 On first-time use, it prompts the user to create a password that is at least moderately-strong, based on a few semi-arbitrary rules. <br>
@@ -24,6 +26,18 @@ Some examples of naming conventions are:
 Which conventions are used isn't the important part, the important part is that they remain the same. <br>
 Writing them down somewhere could be useful (remember: the program's password is essential not to be shared, but also not to be forgotten!).
 
+## Saving and Generating OTPs
+Optionally, the [manage_otps.py](manage_otps.py) script can be used to create encrypted codes for one-time password authentification secrets. For this, the [cryptography](https://pypi.org/project/cryptography/) library and the [ConsoleListInterface](https://github.com/MihneaZar/ConsoleListInterface) class are needed (the program will prompt for the directory of the 'ConsoleListInterface.py' file). <br>
+Once the setup is complete, secrets can be added through the console list interface ('?' shows all commands). Ctrl+N will prompt the user for the name of the secret, its value, and the saved password (saved in its hash form), to encrypt the OTP secret into a code that can only be decrypted with the same password. <br>
+In 'password_generator.py', an additional line of information will show, after the password is inserted, refering to OTP secrets, if they exist. More exactly, the user has to type 'otp/' then the beginning of the secret's name (both parts are case-insensitive), and the program will output the current OTP value for that secret, instead of the normal pseudo-random password. <br>
+This is an alternative to apps such as Google's Authenticator, which, for example, exists only on mobile. Specifically for Google Authenticator, [this website](https://thomasmarwitz.github.io/tools/artifacts/extract-otp-secrets.html) makes it very easy to get the OTP Transfer codes from the QR code Google provides. <br><br>
+Notes:
+- for obtaining a picture of the QR code (which Google doesn't let you screenshot...) it is much easier to take one with another phone, then obtain the codes from it (kind of like it is supposed to work, anyway);
+- whilst Google prompts the user to remove the exported codes, since this requires manual inputs, it is highly inadvisable to actually remove them from the Authenticator app;
+- on that note, **remember**: if you lose access to the Authenticator, Google (nor me, for that matter) **cannot** retrieve them, and to change or disable them, you need to contact the company/institution that issued them, which can be a real hassle, so, again, **do not delete your Authenticator codes**;
+- notably, in accordance with the <a href="#Extra Info">Extra Info</a> paragraph, this functionality can also be used in an Android Python IDE, by copying the '.otps.json' file to the same directory as the 'password-generator.py' Python file, however, on mobile, it is much easier to just use the Google Authenticator or equivalent app. 
+
+<a name="Extra Info"></a>
 ## Extra Info
 This program is written to function properly on (at least) Android Python IDEs (such as [Pydroid](https://pydroid.app/), though with slight modifications that are explained in the app. <br>
 Tested on Windows 11 and Android/Pydroid 3.
