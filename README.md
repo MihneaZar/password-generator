@@ -40,14 +40,14 @@ Notes:
 ## Extra Info
 This program is written to function properly on (at least) Android Python IDEs (such as [Pydroid](https://pydroid.app/), though with slight modifications that are explained in the app. <br>
 
--------------------------------------------------------------------------
-
-*Copyright (c) 2026 Mihnea Bogdan Zarojanu*
-Tested on Windows 11 and Android/Pydroid 3. 
-
 ## Observed Issues
 One issue encountered is that certain websites have password length limits. <br>
 For example, https://www.formula1.com/ has a limit of 30 characters - therefore, the two characters at the beginning or at the end need to be cut off. <br>
 Once again, it does not matter how the passwords are modified to fit specific requirements, what matters is to always apply the same convention. <br>
 Another issue is using a generated password as a command-line argument, since it may have special characters such as '&'. <br>
 The solution that hopefully solves that is using an environment variable with the value of the password. <br>
+
+-------------------------------------------------------------------------
+
+*Copyright (c) 2026 Mihnea Bogdan Zarojanu*
+Tested on Windows 11 and Android/Pydroid 3. 
