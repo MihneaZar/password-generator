@@ -22,11 +22,11 @@ if not IS_ANDROID:
 
 cls = lambda: os.system('cls' if sys.name=='win32' else 'clear')
 HOMEPATH = os.path.dirname(os.path.realpath(__file__))
-
-PASS_HASH_FILE = f"{HOMEPATH}/.pass"
-OTP_FILE = f"{HOMEPATH}/.otps.json"
+DATAPATH = f"{HOMEPATH}/data"
+PASS_HASH_FILE = f"{DATAPATH}/.pass"
+OTP_FILE = f"{DATAPATH}/.otps.json"
 if not IS_ANDROID:
-    sys.stderr = open(f"{HOMEPATH}/errors.txt", "a")
+    sys.stderr = open(f"{DATAPATH}/errors.txt", "a")
 
 HASH_LENGTH = 64
 HASH_CHARS  = string.digits + "abcdef"

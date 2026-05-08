@@ -11,9 +11,10 @@ import os
 
 
 HOMEPATH = os.path.dirname(os.path.realpath(__file__))
-PASS_HASH_FILE = f"{HOMEPATH}/.pass"
-OTP_FILE = f"{HOMEPATH}.otps.json"
-sys.stderr = open(f"{HOMEPATH}/errors.txt", "a")
+DATAPATH = f"{HOMEPATH}/data"
+PASS_HASH_FILE = f"{DATAPATH}/.pass"
+OTP_FILE = f"{DATAPATH}.otps.json"
+sys.stderr = open(f"{DATAPATH}/errors.txt", "a")
 
 HASH_LENGTH = 64
 
@@ -66,13 +67,13 @@ def main():
         print("\nPassword hash is missing or is corrupted, please set by running 'password_generator.py'.\n")
         return
 
-    if not os.path.isfile(f'{HOMEPATH}/.otps.json'):
-        with open(f'{HOMEPATH}/.otps.json', 'w', encoding='utf-8') as file:
+    if not os.path.isfile(f'{DATAPATH}/.otps.json'):
+        with open(f'{DATAPATH}/.otps.json', 'w', encoding='utf-8') as file:
             json.dump([], file, ensure_ascii=False, indent=4)
         
         otps = []
     else: 
-        otps = json.load(open(f'{HOMEPATH}/.otps.json', 'r', encoding='utf-8'))
+        otps = json.load(open(f'{DATAPATH}/.otps.json', 'r', encoding='utf-8'))
 
     console = ConsoleListInterface(items=[otp['name'] for otp in otps], specialCommands=[key.CTRL_N, key.ESC], helpPage=HELP_PAGE)
 
@@ -104,7 +105,7 @@ def main():
             quit()
 
         # if the command wasn't Esc, then it changed the otps
-        with open(f'{HOMEPATH}/.otps.json', 'w', encoding='utf-8') as file:
+        with open(f'{DATAPATH}/.otps.json', 'w', encoding='utf-8') as file:
             json.dump(otps, file, ensure_ascii=False, indent=4)
 
 
