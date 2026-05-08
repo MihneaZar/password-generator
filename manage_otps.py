@@ -55,7 +55,8 @@ def create_new_secret():
         password = pwinput(mask='*')
         print()
         
-    key = base64.b64encode(f"{password:<32}".encode("utf-8"))
+    # fixing password to 32 characters since that's what fernet requires
+    key = base64.b64encode(f"{password[:32]:<32}".encode("utf-8"))
     
     return {'name': name, 'secret': Fernet(key=key).encrypt(code.encode("utf-8")).decode()}
 
