@@ -20,7 +20,7 @@ if not IS_ANDROID:
     import pyperclip
 
 
-cls = lambda: os.system('cls' if sys.name=='win32' else 'clear')
+cls = lambda: os.system('cls' if os.name=='nt' else 'clear')
 HOMEPATH = os.path.dirname(os.path.realpath(__file__))
 DATAPATH = f"{HOMEPATH}/data"
 PASS_HASH_FILE = f"{DATAPATH}/.pass"
