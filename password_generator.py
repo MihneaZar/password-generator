@@ -208,7 +208,8 @@ def password_loop():
     if otps:
         print(f"{colored('Attention', 'yellow')}: For OTP, input 'otp/' then one of the following:{chr(10) if IS_ANDROID else ' '}{', '.join([otp['name'] for otp in otps])}.\n")
     else:
-        print("\n")
+        print()
+        
     try:
         seed = inputimeout(prompt="App/Website: ", timeout=TIMEOUT).lstrip()
     except TimeoutOccurred:

@@ -37,7 +37,7 @@ Controls:
 
 
 def create_new_secret():
-    print("Leave any field empty to cancel.")
+    print("Add new secret (or leave any field empty to cancel):")
     name = input("Secret name: ")
     if not name or name.isspace():
         return None
