@@ -174,11 +174,9 @@ def password_loop():
         print(f'{colored("Warning", "red")}: Typed password will be visible, please do it in a non-public setting.')
         print(f'{colored("Attention", "yellow")}: Once you hit enter, the screen will be cleared, for security.\nSave the inputted password, or, preferably, don\'t forget it!')
 
-        cursor.show()
         password = input("\nChoose password: ")
-        cursor.hide()
         cls()
-       
+        
         if not password or password.isspace():
             quit()
        
@@ -206,8 +204,11 @@ def password_loop():
 
     otps = json.load(open(OTP_FILE)) if os.path.exists(OTP_FILE) else []
        
-    print(f"{colored('Attention', 'yellow')}: Choose a naming standard for your apps and websites (such as their name, or the domain name of websites).\n{colored('Attention', 'yellow')}: the name you type here must be identical every time to generate the same password. \
-          \n{colored('Attention', 'yellow')}: For OTP, input 'otp/' then one of the following:{chr(10) if IS_ANDROID else ' '}{', '.join([otp['name'] for otp in otps])}.\n")
+    print(f"{colored('Attention', 'yellow')}: Choose a naming standard for your apps and websites (such as their name, or the domain name of websites).\n{colored('Attention', 'yellow')}: the name you type here must be identical every time to generate the same password.")
+    if otps:
+        print(f"{colored('Attention', 'yellow')}: For OTP, input 'otp/' then one of the following:{chr(10) if IS_ANDROID else ' '}{', '.join([otp['name'] for otp in otps])}.\n")
+    else:
+        print("\n")
     try:
         seed = inputimeout(prompt="App/Website: ", timeout=TIMEOUT).lstrip()
     except TimeoutOccurred:
