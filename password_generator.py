@@ -174,7 +174,9 @@ def password_loop():
         print(f'{colored("Warning", "red")}: Typed password will be visible, please do it in a non-public setting.')
         print(f'{colored("Attention", "yellow")}: Once you hit enter, the screen will be cleared, for security.\nSave the inputted password, or, preferably, don\'t forget it!')
 
+        cursor.show()
         password = input("\nChoose password: ")
+        cursor.hide()
         cls()
        
         if not password or password.isspace():
