@@ -150,7 +150,8 @@ def generate_password(password, seed):
 
 def generate_otp(password, secret):
     try:
-        key = base64.b64encode(f"{password:<32}".encode("utf-8"))
+        # shortening key to 32 characters since that's what fernet requires
+        key = base64.b64encode(f"{password[:32]:<32}".encode("utf-8"))
         otp_secret = Fernet(key=key).decrypt(secret)
         return pyotp.TOTP(otp_secret).now()
     except:
