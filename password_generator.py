@@ -204,7 +204,7 @@ def password_loop():
         password = pwinput(mask='*')
         print()
 
-    otps = json.load(open(OTP_FILE))
+    otps = json.load(open(OTP_FILE)) if os.path.exists(OTP_FILE) else []
        
     print(f"{colored('Attention', 'yellow')}: Choose a naming standard for your apps and websites (such as their name, or the domain name of websites).\n{colored('Attention', 'yellow')}: the name you type here must be identical every time to generate the same password. \
           \n{colored('Attention', 'yellow')}: For OTP, input 'otp/' then one of the following:{chr(10) if IS_ANDROID else ' '}{', '.join([otp['name'] for otp in otps])}.\n")
