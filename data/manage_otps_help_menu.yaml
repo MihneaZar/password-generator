@@ -1,9 +1,8 @@
 How do I move between secrets?:
     - "- arrow keys -> moving directly between secrets."
-    - "- character  -> move cursor to the next directory / file that starts with character, if it exists."
-    - "- ctrl+f     -> search for the next directory / file that contains string, if it exists (not case sensitive)."
-    - "- '\\'        -> find next directory / file that contains last searched string."
-    - "- enter      -> for directory: open the selected directory;"
+    - "- character  -> move cursor to the next secret that starts with character, if it exists."
+    - "- ctrl+f     -> search for the next secret that contains string, if it exists (not case sensitive)."
+    - "- '\\'        -> find next secret that contains last searched string."
 Editing secrets:
     - " - ctrl+n     -> create new secret."
     - " - ctrl+r     -> rename selected secret."
