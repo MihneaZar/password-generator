@@ -1,4 +1,4 @@
-from ConsoleListInterface import ConsoleListInterface
+from ConsoleListInterface import ConsoleListInterface, MenuInterface
 from cryptography.fernet import Fernet
 from password_generator import is_hash
 from pwinput import pwinput
@@ -6,6 +6,7 @@ from hashlib import sha256
 from readchar import key
 import base64
 import json
+import yaml
 import sys
 import os
 
@@ -17,23 +18,6 @@ OTP_FILE = f"{DATAPATH}.otps.json"
 sys.stderr = open(f"{DATAPATH}/errors.txt", "a")
 
 HASH_LENGTH = 64
-
-HELP_PAGE = """
-Here, you can manage the OTP secrets that can be read by the password generator.
-
-Controls:
-    - arrow keys -> moving between secrets in the list.
-    - character  -> move cursor to the next secret name which starts with character.
-    - ctrl+f     -> search for the next secret name which contains string.
-    - '\\'        -> find secret name that contains string.
-    - ctrl+n     -> create new secret.
-    - ctrl+r     -> rename selected secret.
-    - delete     -> delete selected secret.
-    - ctrl+u     -> update printed list (if list or console size was changed).
-    - '='/'-'    -> increase/decrease length of secret names before they are cut off.
-    - '?'        -> display current help page.
-    - escape     -> quit application.
-""" 
 
 
 def create_new_secret():
@@ -75,7 +59,7 @@ def main():
     else: 
         otps = json.load(open(f'{DATAPATH}/.otps.json', 'r', encoding='utf-8'))
 
-    console = ConsoleListInterface(items=[otp['name'] for otp in otps], specialCommands=[key.CTRL_N, key.ESC], helpPage=HELP_PAGE)
+    console = ConsoleListInterface(items=[otp['name'] for otp in otps], specialCommands=[key.CTRL_N, '?', key.ESC])
 
     console.setTitle("Manage OTP Secrets")
     console.setTopText("Your OTP Secrets:\n")
@@ -99,6 +83,10 @@ def main():
         # deleting secret
         if command == key.DELETE:
             otps.pop(curr_pos)
+
+
+        if command == '?':
+            console.separateInteraction(function=lambda: MenuInterface.helpMenu(yaml.safe_load(open(f"{DATAPATH}/manage_otps_help_menu.yaml")), 'light_grey', 'light_grey'))
 
         if command == key.ESC:
             console.exitInterface()

@@ -1,0 +1,15 @@
+How do I move between secrets?:
+    - "- arrow keys -> moving directly between secrets."
+    - "- character  -> move cursor to the next directory / file that starts with character, if it exists."
+    - "- ctrl+f     -> search for the next directory / file that contains string, if it exists (not case sensitive)."
+    - "- '\\'        -> find next directory / file that contains last searched string."
+    - "- enter      -> for directory: open the selected directory;"
+Editing secrets:
+    - " - ctrl+n     -> create new secret."
+    - " - ctrl+r     -> rename selected secret."
+    - " - delete     -> delete selected secret."
+Application options:
+    - "- ctrl+u  -> update list (if terminal window was resized)."
+    - "- '='/'-' -> increase/decrease number of characters in secret names before they are cut off."
+    - "- '?'     -> display current help page."
+    - "- escape  -> quit application."
