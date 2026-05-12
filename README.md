@@ -47,7 +47,7 @@ One issue encountered is that certain websites have password length limits. <br>
 For example, https://www.formula1.com/ has a limit of 30 characters - therefore, the first or last two characters need to be cut off. <br>
 Once again, it does not matter how the passwords are modified to fit specific requirements, what matters is to always apply the same convention. <br>
 Another issue is using a generated password as a command-line argument, since it may have special characters such as '&' or '!'. <br>
-The solution is putting the password in single quotes (''), at least on Linux. <br>
+The solution is putting the password in single quotes (''), for both Linux and Windows. <br>
 
 -------------------------------------------------------------------------
 
