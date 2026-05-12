@@ -38,7 +38,7 @@ Notes:
 - on that note, **remember**: if you lose access to the Authenticator codes, Google (nor me, for that matter) **cannot** retrieve them, and to change or disable them, you need to contact the company/institution that issued them, which can be a real hassle, so, again, **do not delete your Authenticator codes**;
 - notably, in accordance with the [Extra Info](#extra-info) paragraph, this functionality can also be used in an Android Python IDE, by copying the '.otps.json' file to the same directory as the 'password-generator.py' Python file, however, on mobile, it is much easier to just use the Google Authenticator or equivalent app. 
 
-## Extra Info
+## Additional Information
 This program is written to function properly on (at least) Android Python IDEs (such as [Pydroid](https://pydroid.app/), though with slight modifications that are explained in the app. <br>
 Tested on Windows 11 and Android/Pydroid 3. <br>
 
