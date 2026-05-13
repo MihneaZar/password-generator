@@ -4,9 +4,9 @@ How do I move between secrets?:
     - "- ctrl+f     -> search for the next secret that contains string, if it exists (not case sensitive)."
     - "- '\\'        -> find next secret that contains last searched string."
 Editing secrets:
-    - " - ctrl+n     -> create new secret."
-    - " - ctrl+r     -> rename selected secret."
-    - " - delete     -> delete selected secret."
+    - " - ctrl+n -> create new secret."
+    - " - ctrl+r -> rename selected secret."
+    - " - delete -> delete selected secret."
 Application options:
     - "- ctrl+u  -> update list (if terminal window was resized)."
     - "- '='/'-' -> increase/decrease number of characters in secret names before they are cut off."
