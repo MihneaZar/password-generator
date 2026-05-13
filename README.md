@@ -7,8 +7,9 @@ Console application for generating website/app passwords based on a saved passwo
 - The [termcolor](https://pypi.org/project/termcolor/) library for colored console text;
 - The [cursor](https://pypi.org/project/cursor/) library for hiding the cursor in console;
 - (Optional) The [ConsoleListInterface](https://github.com/MihneaZar/ConsoleListInterface) library for an interface for adding and editing OTP secrets;
-- (Optional) The [cryptography](https://pypi.org/project/cryptography/) library for encoding and decoding information with the password.
-- (Optional) The [PyYAML](https://pypi.org/project/PyYAML/) library for the help page menu structure of the OTPs managing program.
+- (Optional) The [cryptography](https://pypi.org/project/cryptography/) library for encoding and decoding information with the password;
+- (Optional) The [PyYAML](https://pypi.org/project/PyYAML/) library for the help page menu structure of the OTPs managing program;
+- (Optional) The [PyOTP](https://pypi.org/project/pyotp/) library for generating one-time passwords.
 
 ## How it functions
 On first-time use, it prompts the user to create a password that is at least moderately-strong, based on a few semi-arbitrary rules. <br>
