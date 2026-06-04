@@ -146,7 +146,7 @@ ScreenManager:
     name: 'passgen'
 
     Label:
-        text: 'Password Generator'
+        text: 'Password generator'
         font_size: (self.height/20)*1
         pos_hint:{'center_x':0.48, 'center_y': 0.9}
 
@@ -193,6 +193,14 @@ ScreenManager:
         font_size: (self.height/30) * 0.85
         pos_hint: {'center_x': 0.5, 'center_y': 0.45}   
         halign: 'center'
+        
+    Button:
+        text: 'Reset Password'
+        size_hint: .8,.06
+        font_size: self.height - 30
+        pos_hint:{'center_x': 0.5, 'center_y': 0.34}    
+        on_release: root.reset_password()
+        color: 1, 0, 0, 1
 """
 
 
@@ -233,11 +241,15 @@ class MainScreen(Screen):
             if result != GOOD_PASSWORD:
                 self.response_color = 1, 0, 0, 1
                 self.show_result(result)
+                self.ids.password.focus = True
                 
                 return
 
             else: 
                 open(PASS_HASH_FILE, 'w').write(sha256(password.encode('utf-8')).hexdigest())
+                self.response_color = 0, 1, 0, 1
+                self.show_result("Password has been saved.")
+                
 
         if app and not app.isspace():
             if sha256(password.encode('utf-8')).hexdigest() != open(PASS_HASH_FILE).read(HASH_LENGTH):
@@ -254,21 +266,4 @@ class MainScreen(Screen):
 
             self.ids.app.text = ''
 
-            generated_password = generate_password(password, app)
-            Clipboard.copy(generated_password)
-            
-            self.response_color = 0, 1, 0, 1
-            self.show_result("Password saved to clipboard!") 
-            
-        self.ids.app.focus = True
-
-
-def main():
-    sm = ScreenManager()
-    sm.add_widget(MainScreen(name='Main'))
-
-    ProfileCreate().run()
-
-
-if __name__=="__main__":
-    main()
+            g
