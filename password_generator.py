@@ -266,4 +266,28 @@ class MainScreen(Screen):
 
             self.ids.app.text = ''
 
-            g
+            generated_password = generate_password(password, app)
+            Clipboard.copy(generated_password)
+            
+            self.response_color = 0, 1, 0, 1
+            self.show_result("Password saved to clipboard!") 
+            
+        self.ids.app.focus = True
+        
+    def reset_password(self):
+    	if os.path.exists(".pass"):
+		    os.remove(".pass")
+		    self.response_color = 0, 1, 0, 1
+		    self.show_result("Password has been reset.")
+		    self.last_generate = time()
+
+
+def main():
+    sm = ScreenManager()
+    sm.add_widget(MainScreen(name='Main'))
+
+    ProfileCreate().run()
+
+
+if __name__=="__main__":
+    main()
