@@ -7,7 +7,7 @@ This version was written with the help of the [Pydroid](https://pydroid.app/) ID
 
 ## Installing the app
 You can either build it yourself using [this source](https://github.com/Novin1380/kivy-to-apk-with-colab/blob/main/README.md). <br>
-Or use the APK directly to install it. <br>
+Or use the [APK](password_generator.apk) directly to install it. <br>
 You might need to override your device's safety settings/warnings for installing apps in order for this to work. <br>
 
 -------------------------------------------------------------------------
