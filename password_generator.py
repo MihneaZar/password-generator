@@ -146,7 +146,7 @@ ScreenManager:
     name: 'passgen'
 
     Label:
-        text: 'Password generator'
+        text: 'Password Generator'
         font_size: (self.height/20)*1
         pos_hint:{'center_x':0.48, 'center_y': 0.9}
 
