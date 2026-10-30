@@ -179,17 +179,18 @@ def password_loop():
         return
    
     print(f'{colored("Success", "green")}: Password hash found.')
-    print(f'{colored("Attention", "yellow")}: Change password by removing the data/pass file, but that means losing the previous password.')
+    print(f"{colored('Attention', 'yellow')}: Change password by removing the 'data/pass' file, but that means losing the previous password.")
     print(f'{colored("Attention", "yellow")}: Exit program by leaving the \'App/Website\' input field empty.\n')
 
     otps = json.load(open(OTP_FILE)) if os.path.exists(OTP_FILE) else []
 
     # input app/website name or otp name
     print(f"{colored('Attention', 'yellow')}: Choose a naming standard for your apps and websites (such as their name, or the domain name of websites).\n{colored('Attention', 'yellow')}: The name you type here must be identical every time to generate the same password.")
+    otps = None
     if otps:
         print(f"{colored('Attention', 'yellow')}: For OTP, input 'otp/' then one of the following: {', '.join([otp['name'] for otp in otps])}.\n")
     else:
-        print()
+        print(f"{colored('Attention', 'yellow')}: You can also generate OTPs by adding them through 'manage_otps.py'.\n")
         
     seed = input("App/Website: ").lstrip()
    

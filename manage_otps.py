@@ -1,6 +1,7 @@
 from ConsoleListInterface import ConsoleListInterface, MenuInterface
 from cryptography.fernet import Fernet
 from password_generator import is_hash
+from termcolor import colored
 from pwinput import pwinput
 from hashlib import sha256
 from readchar import key
@@ -13,15 +14,15 @@ import os
 
 HOMEPATH = os.path.dirname(os.path.realpath(__file__))
 DATAPATH = f"{HOMEPATH}/data"
-PASS_HASH_FILE = f"{DATAPATH}/.pass"
-OTP_FILE = f"{DATAPATH}.otps.json"
+PASS_HASH_FILE = f"{DATAPATH}/pass"
+OTP_FILE = f"{DATAPATH}/.otps.json"
 sys.stderr = open(f"{DATAPATH}/errors.txt", "a")
 
 HASH_LENGTH = 64
 
 
 def create_new_secret():
-    print("Add new secret (or leave any field empty to cancel):")
+    print(f"{colored('Attention', 'yellow')}: Add new secret (or leave any field empty to cancel).\n")
     name = input("Secret name: ")
     if not name or name.isspace():
         return None
@@ -36,7 +37,9 @@ def create_new_secret():
         if not password or password.isspace():
             print()
             return None
-        print("Password is incorrect. Try again, or leave it empty to cancel.")
+        
+        print(f"{colored('Warning', 'red')}: Password is incorrect. Try again, or leave it empty to cancel.\n")
+        
         password = pwinput(mask='*')
         print()
         
@@ -48,7 +51,7 @@ def create_new_secret():
 
 def main():
     if not os.path.exists(PASS_HASH_FILE) or not is_hash(open(PASS_HASH_FILE).read(HASH_LENGTH)):
-        print("\nPassword hash is missing or is corrupted, please set by running 'password_generator.py'.\n")
+        print(f"{colored('Warning', 'red')}: Password hash is missing or is corrupted, please set by running 'password_generator.py'.\n")
         return
 
     if not os.path.isfile(f'{DATAPATH}/.otps.json'):
@@ -59,10 +62,10 @@ def main():
     else: 
         otps = json.load(open(f'{DATAPATH}/.otps.json', 'r', encoding='utf-8'))
 
-    console = ConsoleListInterface(items=[otp['name'] for otp in otps], specialCommands=[key.CTRL_N, '?', key.ESC])
+    console = ConsoleListInterface(items=[colored(otp['name'], 'light_blue') for otp in otps], specialCommands=[key.CTRL_N, '?', key.ESC])
 
-    console.setTitle("Manage OTP Secrets")
-    console.setTopText("Your OTP Secrets:\n")
+    console.setTitle('OTP Manager')
+    console.setTopText(colored('Your OTPs:\n', 'blue'))
     
     while True:
         command, curr_pos = console.interact()
@@ -73,7 +76,7 @@ def main():
             if new_secret:
                 otps.append(new_secret)
 
-            console.updateList([otp['name'] for otp in otps])
+            console.updateList([colored(otp['name'], 'light_blue') for otp in otps])
             console.updatePos(len(otps) - 1)
 
         # changing name of secret
@@ -84,10 +87,11 @@ def main():
         if command == key.DELETE:
             otps.pop(curr_pos)
 
-
+        # help menu
         if command == '?':
             console.separateInteraction(function=lambda: MenuInterface.helpMenu(yaml.safe_load(open(f"{DATAPATH}/manage_otps_help_menu.yaml")), 'light_grey', 'light_grey'))
 
+        # exit manager
         if command == key.ESC:
             console.exitInterface()
             quit()
