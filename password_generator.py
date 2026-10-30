@@ -1,13 +1,11 @@
-from inputimeout import inputimeout, TimeoutOccurred
 from termcolor import colored
 from pwinput import pwinput
 from hashlib import sha256
-import cursor
+import pyperclip
 import string
 import base64
 import pyotp
 import json
-import sys
 import os
 
 try:
@@ -15,18 +13,11 @@ try:
 except:
     pass
 
-IS_ANDROID = hasattr(sys, 'getandroidapilevel')
-if not IS_ANDROID:
-    import pyperclip
 
-
-cls = lambda: os.system('cls' if os.name=='nt' else 'clear')
 HOMEPATH = os.path.dirname(os.path.realpath(__file__))
 DATAPATH = f"{HOMEPATH}/data"
-PASS_HASH_FILE = f"{DATAPATH}/.pass"
+PASS_HASH_FILE = f"{DATAPATH}/pass"
 OTP_FILE = f"{DATAPATH}/.otps.json"
-if not IS_ANDROID:
-    sys.stderr = open(f"{DATAPATH}/errors.txt", "a")
 
 HASH_LENGTH = 64
 HASH_CHARS  = string.digits + "abcdef"
@@ -40,9 +31,6 @@ GOOD_PASSWORD   = "Yes this is a good password"
 # other special characters are not used to avoid potential issues
 ACCEPTED_CHARACTERS = string.ascii_lowercase + string.ascii_uppercase + string.digits + "!@#$%^&\\"
 
-# timeout in seconds after password was introduced
-# also for showing generated password on mobile
-TIMEOUT = 10
 
 # checks if string is correct sha256 string
 def is_hash(hash_string):
@@ -125,7 +113,7 @@ def check_password(password):
 
     # at least one password rule was not fulfilled
     if error_message:
-        return error_message
+        return error_message[:-1]
     else:
         # password is good
         return GOOD_PASSWORD
@@ -155,27 +143,23 @@ def generate_otp(password, secret):
         otp_secret = Fernet(key=key).decrypt(secret)
         return pyotp.TOTP(otp_secret).now()
     except:
-        
         print(f'{colored("Warning", "red")}: OTP generation failed, this secret is invalid.\n')
         return None
 
 
 def password_loop():
-    if not IS_ANDROID:
-        os.system("title Password Generator")
+    os.system("title Password Generator")
    
     if not os.path.exists(PASS_HASH_FILE) or not is_hash(open(PASS_HASH_FILE).read(HASH_LENGTH)):
         if os.path.exists(PASS_HASH_FILE):
-            print(f'{colored("Warning", "red")}: Password hash has been corrupted.')
+            print(f'{colored("Warning", "red")}: Password hash has been corrupted.', end = ' ')
         else:
-            print(f'{colored("Attention", "yellow")}: Password not set.')
+            print(f'{colored("Attention", "yellow")}: Password not set.', end = ' ')
 
-        print("\nChoose a new password, or leave empty to exit.")
-        print(f'{colored("Warning", "red")}: Typed password will be visible, please do it in a non-public setting.')
-        print(f'{colored("Attention", "yellow")}: Once you hit enter, the screen will be cleared, for security.\nSave the inputted password, or, preferably, don\'t forget it!')
+        print("Choose a new password, or leave empty to exit.\n")
 
-        password = input("\nChoose password: ")
-        cls()
+        password = pwinput("Choose password: ")
+        print()
         
         if not password or password.isspace():
             quit()
@@ -184,38 +168,30 @@ def password_loop():
         if password_check != GOOD_PASSWORD:
             return password_check
 
+        password_retype = pwinput("Re-type password: ")
+        print()
+
+        if password != password_retype:
+            return f'{colored("Warning", "red")}: Passwords do not match.'
+
         open(PASS_HASH_FILE, 'w').write(sha256(password.encode('utf-8')).hexdigest())
 
         return
    
-    print(f'{colored("Success", "green")}: Password hash found.\n')
-    print("Input saved password and app/website to generate password.")
-    print(f'{colored("Attention", "yellow")}: You can change the current password by removing the .pass file, but that means losing the previous password.')
-    print(f'{colored("Attention", "yellow")}: Exit program by leaving any input field empty.\n')
-    password = pwinput(mask='*')
-    print()
-    while sha256(password.encode('utf-8')).hexdigest() != open(PASS_HASH_FILE).read(HASH_LENGTH):
-        if not password or password.isspace():
-            print()
-            quit()
-        print(f'{colored("Warning", "red")}: Password is incorrect.\nPlease try again or leave empty to quit.\n')
-        password = pwinput(mask='*')
-        print()
+    print(f'{colored("Success", "green")}: Password hash found.')
+    print(f'{colored("Attention", "yellow")}: Change password by removing the data/pass file, but that means losing the previous password.')
+    print(f'{colored("Attention", "yellow")}: Exit program by leaving the \'App/Website\' input field empty.\n')
 
     otps = json.load(open(OTP_FILE)) if os.path.exists(OTP_FILE) else []
-       
-    print(f"{colored('Attention', 'yellow')}: Choose a naming standard for your apps and websites (such as their name, or the domain name of websites).\n{colored('Attention', 'yellow')}: the name you type here must be identical every time to generate the same password.")
+
+    # input app/website name or otp name
+    print(f"{colored('Attention', 'yellow')}: Choose a naming standard for your apps and websites (such as their name, or the domain name of websites).\n{colored('Attention', 'yellow')}: The name you type here must be identical every time to generate the same password.")
     if otps:
-        print(f"{colored('Attention', 'yellow')}: For OTP, input 'otp/' then one of the following:{chr(10) if IS_ANDROID else ' '}{', '.join([otp['name'] for otp in otps])}.\n")
+        print(f"{colored('Attention', 'yellow')}: For OTP, input 'otp/' then one of the following: {', '.join([otp['name'] for otp in otps])}.\n")
     else:
         print()
         
-    try:
-        seed = inputimeout(prompt="App/Website: ", timeout=TIMEOUT).lstrip()
-    except TimeoutOccurred:
-        if not IS_ANDROID:
-            print()
-        return f'{colored("Warning", "red")}: Timeout occured, insert password again.\n'
+    seed = input("App/Website: ").lstrip()
    
     print()
 
@@ -223,19 +199,42 @@ def password_loop():
         print()
         quit()
 
+    is_otp = False
 
+    # checking and getting otp (otherwise seed is same as input)
     if seed.lower().startswith('otp/'):
         app = seed[len('otp/'):].lower()
-        
+            
         otp = next((otp for otp in otps if otp['name'].lower().startswith(app)), None)
-
+    
         if not otp:
             return f'{colored("Warning", "red")}: Unknown OTP name.\n'
-        
-        print(f'{colored("Success", "green")}: Secret for {otp["name"]} found.')
+            
+        print(f'{colored("Success", "green")}: Secret for {otp["name"]} found.\n')
+    
+        seed = otp['secret']
+        is_otp = True
 
-        secret = otp['secret']
-        output_password = generate_otp(password, secret)
+    # input password
+    password = pwinput()
+
+    while sha256(password.encode('utf-8')).hexdigest() != open(PASS_HASH_FILE).read(HASH_LENGTH):
+        print()
+        if not password or password.isspace():
+            return
+        
+        print(f'{colored("Warning", "red")}: Password is incorrect.')
+        print(f'{colored("Attention", "yellow")}: Please try again or leave empty to start again.\n')
+        password = pwinput()
+    
+    print()
+
+    if sha256(password.encode('utf-8')).hexdigest() != open(PASS_HASH_FILE).read(HASH_LENGTH):
+        print(f'{colored("Warning", "red")}: Password is incorrect.\nPlease try again or leave empty to quit.\n\n')
+
+    # generating otp/password
+    if is_otp:
+        output_password = generate_otp(password, seed)
     else:
         output_password = generate_password(password, seed)
 
@@ -245,22 +244,9 @@ def password_loop():
         return
 
 
-    if not IS_ANDROID:
-        pyperclip.copy(output_password)
+    pyperclip.copy(output_password)
 
-        print(f'{colored("Success", "green")}: App/Website password copied to clipboard.\n{colored("Warning", "red")}: Please don\'t forget to overwrite it and remove it from clipboard when finished.\n')
-
-    else:
-        cursor.hide()
-        input(f'{colored("Warning", "red")}: Screen will be cleared, and the app/website password  will be shown for {TIMEOUT} seconds, to make copying easier.\nPlease don\'t forget to clear it from clipboard when finished.\n\nPress enter now to see password, then again to continue.\n')
-
-        cls()
-        try:
-            inputimeout(prompt=output_password, timeout=TIMEOUT)
-        except TimeoutOccurred:
-            pass
-
-        cursor.show()
+    print(f'{colored("Success", "green")}: Password copied to clipboard.\n{colored("Attention", "yellow")}: Please don\'t forget to overwrite it and remove it from clipboard when finished.\n')
 
     return ""
 
@@ -268,8 +254,6 @@ def password_loop():
 def main():
     while True:
         error_message = password_loop()
-        if IS_ANDROID:
-            cls()
            
         if error_message:
             print(error_message)
