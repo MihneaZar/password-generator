@@ -22,7 +22,8 @@ HASH_LENGTH = 64
 
 
 def create_new_secret():
-    print(f"{colored('Attention', 'yellow')}: Add new secret (or leave any field empty to cancel).\n")
+    print(f"{colored('Attention', 'yellow')}: Add new OTP (or leave any field empty to cancel).")
+    print(f"{colored('Attention', 'yellow')}: For how to obtain the secret key for an OTP, check the OTP section from the README.\n")
     name = input("Secret name: ")
     if not name or name.isspace():
         return None
