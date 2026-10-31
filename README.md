@@ -31,7 +31,7 @@ Optionally, the [manage_otps.py](manage_otps.py) script can be used to create en
 Once the password is set, OTPs can be added through the console list interface ('?' shows all commands). Ctrl+N will prompt the user for a name for the OTP, its secret, and the saved password (stored in its hash form), to encrypt the OTP secret into a code that can only be decrypted with the same password. <br>
 Every OTP utilizes a secret key based on which it generates the 6-digit code. <br>
 This is an alternative to apps such as Google's Authenticator, which exists only on mobile. Specifically for Google's Authenticator, [this website](https://thomasmarwitz.github.io/tools/artifacts/extract-otp-secrets.html) makes it very easy to get the OTP transfer codes (the secrets) from the QR code Google provides. <br>
-In 'password_generator.py', the user has to type 'otp/' then the beginning of the OTP's name (both parts are case-insensitive), and the program will output the current OTP value for that secret, instead of the normal pseudo-random password. <br><br>
+In 'password_generator.py', the user has to type 'otp/' then the name of the OTP, and the program will output the current OTP value for that secret, instead of the normal pseudo-random password. <br><br>
 Notes:
 - for obtaining a picture of the QR code (which Google doesn't let you screenshot...) it is much easier to take one with another phone, then obtain the codes from it (kind of like it is supposed to work, anyway); alternatively, try scanning codes one by one, since they are shown larger, and therefore easier to scan, that way;
 - whilst Google prompts the user to remove the exported codes, since this requires manual inputs, it is highly inadvisable to actually remove them from the Authenticator app;
