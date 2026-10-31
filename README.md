@@ -2,11 +2,10 @@
 Console application for generating website/app passwords based on a saved password (with only the hash saved, for security).
 
 ## Requirements
-- The [inputimeout](https://pypi.org/project/inputimeout/) library for reading from console with a timeout;
 - The [PWInput](https://pypi.org/project/pwinput/) library for inputting hidden password;
 - The [termcolor](https://pypi.org/project/termcolor/) library for colored console text;
 - The [cursor](https://pypi.org/project/cursor/) library for hiding the cursor in console;
-- (Optional) The [ConsoleListInterface](https://github.com/MihneaZar/ConsoleListInterface) library for an interface for adding and editing OTP secrets;
+- (Optional) The [ConsoleListInterface](https://github.com/MihneaZar/ConsoleListInterface) library for the autocomplete feature and the interface for adding and editing OTP secrets;
 - (Optional) The [cryptography](https://pypi.org/project/cryptography/) library for encoding and decoding information with the password;
 - (Optional) The [PyYAML](https://pypi.org/project/PyYAML/) library for the help page menu structure of the OTPs managing program;
 - (Optional) The [PyOTP](https://pypi.org/project/pyotp/) library for generating one-time passwords.

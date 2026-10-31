@@ -13,11 +13,20 @@ try:
 except:
     pass
 
+# avoiding forcing install of ConsoleListInterface solely for the autocomplete
+AUTOCOMPLETE = False
+try:
+    from ConsoleListInterface import autocomplete
+    AUTOCOMPLETE = True
+except:
+    pass
+
 
 HOMEPATH = os.path.dirname(os.path.realpath(__file__))
-DATAPATH = f"{HOMEPATH}/data"
-PASS_HASH_FILE = f"{DATAPATH}/pass"
-OTP_FILE = f"{DATAPATH}/.otps.json"
+DATAPATH = f"{HOMEPATH}\data"
+PASS_HASH_FILE = f"{DATAPATH}\pass"
+OTP_FILE = f"{DATAPATH}\.otps.json"
+AUTOCOMPLETE_FILE = f"{DATAPATH}\.autocomplete"
 
 HASH_LENGTH = 64
 HASH_CHARS  = string.digits + "abcdef"
@@ -186,18 +195,27 @@ def password_loop():
 
     # input app/website name or otp name
     print(f"{colored('Attention', 'yellow')}: Choose a naming standard for your apps and websites (such as their name, or the domain name of websites).\n{colored('Attention', 'yellow')}: The name you type here must be identical every time to generate the same password.")
-    otps = None
     if otps:
         print(f"{colored('Attention', 'yellow')}: For OTP, input 'otp/' then one of the following: {', '.join([otp['name'] for otp in otps])}.\n")
     else:
         print(f"{colored('Attention', 'yellow')}: You can also generate OTPs by adding them through 'manage_otps.py'.\n")
-        
-    seed = input("App/Website: ").lstrip()
+
+    if AUTOCOMPLETE:
+        # the autocomplete list is a combination of the apps/websites a password was previously generated for
+        # and the otp names (with otp/ before them)
+
+        # first time use, before autocomplete file has been created
+        if os.path.isfile(AUTOCOMPLETE_FILE):
+            prev_apps = [line.rstrip() for line in open(AUTOCOMPLETE_FILE).readlines()]
+        else:
+            prev_apps = []
+        seed = autocomplete(prev_apps + [f'otp/{otp["name"]}' for otp in otps], "App/Website: ").lstrip()
+    else:
+        seed = input("App/Website: ")
    
     print()
 
     if not seed or seed.isspace():
-        print()
         quit()
 
     is_otp = False
@@ -248,6 +266,11 @@ def password_loop():
     pyperclip.copy(output_password)
 
     print(f'{colored("Success", "green")}: Password copied to clipboard.\n{colored("Attention", "yellow")}: Please don\'t forget to overwrite it and remove it from clipboard when finished.\n')
+
+    if AUTOCOMPLETE and not is_otp and seed not in prev_apps:
+        prev_apps.append(seed)
+        with open(AUTOCOMPLETE_FILE, 'w') as file:
+            file.write("\n".join(prev_apps))
 
     return ""
 
