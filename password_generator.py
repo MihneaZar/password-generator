@@ -188,8 +188,8 @@ def password_loop():
         return
    
     print(f'{colored("Success", "green")}: Password hash found.')
-    print(f"{colored('Attention', 'yellow')}: Change password by removing the 'data/pass' file, but that means losing the previous password.")
-    print(f'{colored("Attention", "yellow")}: Exit program by leaving the \'App/Website\' input field empty.\n')
+    print(f"{colored('Attention', 'yellow')}: Reset password by typing '!reset' in the App/Website field, but that means losing the previous password.")
+    print(f"{colored('Attention', 'yellow')}: Exit program by leaving the App/Website field empty.\n")
 
     otps = json.load(open(OTP_FILE)) if os.path.exists(OTP_FILE) else []
 
@@ -217,6 +217,19 @@ def password_loop():
 
     if not seed or seed.isspace():
         quit()
+
+    if seed == "!reset":
+        print(f"{colored('Warning', 'red')}: You are about to reset this application's password.\n")
+        yes = input(f"Type '{colored('Yes', 'green')}' to confirm reset: ")
+
+        print()
+
+        if yes != "Yes":
+            print(f"{colored('Attention', 'yellow')}: You must type 'Yes' with only the first letter capitalized to confirm password reset.\n")
+            return
+
+        os.remove(PASS_HASH_FILE)
+        return
 
     is_otp = False
 
