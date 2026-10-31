@@ -209,7 +209,7 @@ def password_loop():
             prev_apps = [line.rstrip() for line in open(AUTOCOMPLETE_FILE).readlines()]
         else:
             prev_apps = []
-        seed = autocomplete(prev_apps + [f'otp/{otp["name"]}' for otp in otps], "App/Website: ").lstrip()
+        seed = autocomplete(prev_apps + (["otp/"] if otps else []) + [f'otp/{otp["name"]}' for otp in otps], "App/Website: ").lstrip()
     else:
         seed = input("App/Website: ")
    
